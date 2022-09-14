@@ -1,19 +1,20 @@
+// ignore: depend_on_referenced_packages
 import 'package:intl/intl.dart';
 
 class Utils{
-  static String getImagePath(String name, {String format: 'png'}) {
+  static String getImagePath(String name, {String format = 'png'}) {
     return 'assets/images/$name.$format';
   }
 
-  static String getImageFeedbackPath(String name, {String format: 'png'}) {
+  static String getImageFeedbackPath(String name, {String format = 'png'}) {
     return 'assets/images/feedback/$name.$format';
   }
 
-  static String getImageFeaturePath(String name, {String format: 'png'}) {
+  static String getImageFeaturePath(String name, {String format = 'png'}) {
     return 'assets/images/feature_caris/$name.$format';
   }
 
-  static String getIconPath(String name, {String format: 'svg'}) {
+  static String getIconPath(String name, {String format = 'svg'}) {
     return 'assets/icons/$name.$format';
   }
 
