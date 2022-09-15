@@ -4,7 +4,6 @@ import 'package:varstools/utilities/extensions/color.dart';
 class AppColors {
   static Color primary = HexColor('#400F6F');
   static Color routing = HexColor('#DEDBFF');
-  static Color lightGray = Color(0xD3D3D3);
   static Color crimsonColor = HexColor('#EA1A4B');
   static Color crimsonFunctionColor = HexColor('#ED1B55');
   static Color peachSchnappsColor = HexColor('#ffded6');

@@ -50,7 +50,7 @@ class _WidgetSearchState extends State<WidgetSearch> {
                 ),
                 enabledBorder: InputBorder.none,
                 focusedBorder: InputBorder.none,
-                contentPadding: EdgeInsets.only(bottom: 15),
+                //contentPadding: EdgeInsets.only(bottom: 2.0.h),
                 border: InputBorder.none,
                 prefixIcon: Icon(Icons.search),
               ),

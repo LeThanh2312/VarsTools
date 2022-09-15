@@ -43,6 +43,7 @@ dev_dependencies:
 
   #MEDIA
   flutter_svg: ^0.22.0
+  flutter_dash: ^1.0.0
 
   #CONTROLL
   intl: ^0.17.0
@@ -52,6 +53,11 @@ dev_dependencies:
 
   # CUSTOM CAMERA
   camera: ^0.10.0+1
+
+  # CROP IMAGE
+  image_cropper: ^3.0.0
+  dotted_border: ^2.0.0
+  crop_your_image: ^0.7.2
 
 
   # The "flutter_lints" package below contains a set of recommended lints to

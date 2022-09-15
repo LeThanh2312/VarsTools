@@ -16,6 +16,3 @@ var placeHolderWidget = Container(
     borderRadius: BorderRadius.circular(defaultPadding / 4),
   ),
 );
-
-const DEFAULT_PAGE = 1;
-const LIMIT_PER_PAGE = 30;
