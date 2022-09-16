@@ -9,7 +9,8 @@ import 'package:camera/camera.dart';
 
 
 class BottomBarMainScreen extends StatefulWidget {
-  const BottomBarMainScreen({Key? key}) : super(key: key);
+  const BottomBarMainScreen({Key? key,required this.indexTabItem}) : super(key: key);
+  final TabItem? indexTabItem;
 
   @override
   State<BottomBarMainScreen> createState() => _BottomBarMainScreenState();
@@ -17,7 +18,13 @@ class BottomBarMainScreen extends StatefulWidget {
 
 class _BottomBarMainScreenState extends State<BottomBarMainScreen> {
   bool clickedCentreFAB = false;
-  late TabItem _currentTab = TabItem.home;
+  late TabItem _currentTab = widget.indexTabItem!;
+
+  @override
+  void initState() {
+    print('curent Tab');
+    super.initState();
+  }
 
   void updateTabSelection(TabItem tabItem) {
     setState(() {
@@ -27,6 +34,7 @@ class _BottomBarMainScreenState extends State<BottomBarMainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print("curent Tab: $_currentTab");
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Stack(
@@ -128,6 +136,4 @@ class _BottomBarMainScreenState extends State<BottomBarMainScreen> {
       ),
     );
   }
-
-
 }

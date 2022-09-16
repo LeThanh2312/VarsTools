@@ -44,7 +44,7 @@ class _ListFolderState extends State<ListFolder> {
                 children: [
                   InkWell(
                     onTap: () {
-                      _showMyDialog();
+                      _showDialogCreateFolder();
                     },
                     child: const Icon(Icons.add_circle),
                   ),
@@ -100,7 +100,7 @@ class _ListFolderState extends State<ListFolder> {
     );
   }
 
-  Future<void> _showMyDialog() async {
+  Future<void> _showDialogCreateFolder() async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!

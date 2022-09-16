@@ -2,9 +2,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:sizer/sizer.dart';
+import 'package:varstools/screens/bottom_navigation_bar/bottom_navigation_bar.dart';
 import 'package:varstools/screens/camera/crop_image_screen.dart';
 import 'package:varstools/screens/camera/widgets/popup_filter_image.dart';
 import 'package:varstools/utilities/extensions/enum/style_camera.dart';
+import 'package:varstools/utilities/extensions/enum/tab_item.dart';
 
 class PreviewImageScreen extends StatefulWidget {
   const PreviewImageScreen({
@@ -37,7 +39,9 @@ class _PreviewImageScreenState extends State<PreviewImageScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _numbered('1'),
-                        const SizedBox(width: 10,),
+                        const SizedBox(
+                          width: 10,
+                        ),
                         Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -54,6 +58,7 @@ class _PreviewImageScreenState extends State<PreviewImageScreen> {
                     )
                   : SizedBox(
                       width: 40.0.w,
+                      height: 80.0.h,
                       child: ListView(
                         shrinkWrap: true,
                         scrollDirection: Axis.vertical,
@@ -64,8 +69,11 @@ class _PreviewImageScreenState extends State<PreviewImageScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               _numbered(index),
-                              Image.file(File(e.path),
-                                  fit: BoxFit.cover, width: 30.0.w),
+                              Container(
+                                margin: const EdgeInsets.only(bottom: 10),
+                                child: Image.file(File(e.path),
+                                    fit: BoxFit.cover, width: 30.0.w),
+                              ),
                             ],
                           );
                         }).toList(),
@@ -113,7 +121,9 @@ class _PreviewImageScreenState extends State<PreviewImageScreen> {
               ),
               //to leave space in between the bottom app bar items and below the FAB
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  _showDialogSelectFolder();
+                },
                 iconSize: 27.0,
                 icon: const Icon(
                   Icons.check,
@@ -161,10 +171,53 @@ class _PreviewImageScreenState extends State<PreviewImageScreen> {
         height: isShowPopupFilter ? 40.0.h : 0,
         decoration: BoxDecoration(
             borderRadius:
-            BorderRadius.circular(isShowPopupFilter ? 0.0 : 300.0),
+                BorderRadius.circular(isShowPopupFilter ? 0.0 : 300.0),
             color: Colors.transparent),
         child: const PopupFilter(),
       ),
+    );
+  }
+
+  Future<void> _showDialogSelectFolder() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            'Bạn muốn lưu files vào đâu ?',
+            textAlign: TextAlign.center,
+          ),
+          actions: <Widget>[
+            ElevatedButton(
+              child: const Text(
+                'Thư mục mới',
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            ElevatedButton(
+              child: const Text(
+                'Chọn thư mục',
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (contextMain) =>
+                        const BottomBarMainScreen(indexTabItem: TabItem.file),
+                  ),
+                  ModalRoute.withName('/'),
+                );
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

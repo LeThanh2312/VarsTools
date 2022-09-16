@@ -48,21 +48,21 @@ class _CropImageScreenState extends State<CropImageScreen> {
             ),
           ),
           SizedBox(
-            width: 68.0.h,
+            width: 68.0.w,
             child: Stack(
               children: [
                 Image.file(File(widget.picture[index - 1].path),
                     fit: BoxFit.cover, width: 68.0.w),
-                IgnorePointer(
-                  child: ClipPath(
-                    //clipper: _CircleCropAreaClipper(_rect),
-                    child: Container(
-                      width: double.infinity,
-                      height: double.infinity,
-                      color: Colors.black.withAlpha(100),
-                    ),
-                  ),
-                ),
+                // IgnorePointer(
+                //   child: ClipPath(
+                //     //clipper: _CircleCropAreaClipper(_rect),
+                //     child: Container(
+                //       width: double.infinity,
+                //       height: double.infinity,
+                //       color: Colors.black.withAlpha(100),
+                //     ),
+                //   ),
+                // ),
               ],
             )
           ),

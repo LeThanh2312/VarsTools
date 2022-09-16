@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:varstools/screens/camera/list_image_photo_screen.dart';
 import 'package:varstools/screens/camera/preview_image.dart';
 import 'package:varstools/utilities/extensions/enum/style_camera.dart';
 import 'package:flutter_dash/flutter_dash.dart';
@@ -88,7 +91,11 @@ class _CameraScreenState extends State<CameraScreen> {
                       children: [
                         InkWell(
                           onTap: () {
-                            styleCamera = StyleCamera.cardID;
+                            if (listPicture.isEmpty) {
+                              styleCamera = StyleCamera.cardID;
+                            } else {
+                              _showDialogMoveStyleCamera(StyleCamera.cardID);
+                            }
                             setState(() {});
                           },
                           child: Text(
@@ -105,7 +112,11 @@ class _CameraScreenState extends State<CameraScreen> {
                         ),
                         InkWell(
                           onTap: () {
-                            styleCamera = StyleCamera.passport;
+                            if (listPicture.isEmpty) {
+                              styleCamera = StyleCamera.passport;
+                            } else {
+                              _showDialogMoveStyleCamera(StyleCamera.passport);
+                            }
                             setState(() {});
                           },
                           child: Text(
@@ -122,7 +133,11 @@ class _CameraScreenState extends State<CameraScreen> {
                         ),
                         InkWell(
                           onTap: () {
-                            styleCamera = StyleCamera.document;
+                            if (listPicture.isEmpty) {
+                              styleCamera = StyleCamera.document;
+                            } else {
+                              _showDialogMoveStyleCamera(StyleCamera.document);
+                            }
                             setState(() {});
                           },
                           child: Text(
@@ -153,15 +168,59 @@ class _CameraScreenState extends State<CameraScreen> {
                           ),
                         ),
                         Expanded(
-                          child: IconButton(
-                            onPressed: () {},
-                            iconSize: 50,
-                            padding: EdgeInsets.zero,
-                            constraints: const BoxConstraints(),
-                            icon: const Icon(Icons.collections,
-                                color: Colors.black),
-                          ),
-                        ),
+                          child: (listPicture.isNotEmpty &&
+                                  (styleCamera == StyleCamera.passport ||
+                                      styleCamera == StyleCamera.document))
+                              ? InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            ListImagePhotoScreen(
+                                          picture: listPicture,
+                                          style: StyleCamera.passport,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: SizedBox(
+                                    width: 40,
+                                    height: 40,
+                                    child: Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        Image.file(
+                                          File(listPicture[0].path),
+                                          fit: BoxFit.cover,
+                                          width: 40,
+                                        ),
+                                        Positioned(
+                                          right: 8.0.w,
+                                          top: 0,
+                                          child: Container(
+                                              padding: const EdgeInsets.all(2),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                color: Colors.red,
+                                              ),
+                                              child: Text(
+                                                  '${listPicture.length}/20')),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              : IconButton(
+                                  onPressed: () {},
+                                  iconSize: 50,
+                                  padding: EdgeInsets.zero,
+                                  constraints: const BoxConstraints(),
+                                  icon: const Icon(Icons.collections,
+                                      color: Colors.black),
+                                ),
+                        )
                       ],
                     ),
                   ],
@@ -253,54 +312,20 @@ class _CameraScreenState extends State<CameraScreen> {
               },
             ));
       }
-    } else if (styleCamera == StyleCamera.passport) {
+    } else if (styleCamera == StyleCamera.passport || styleCamera == StyleCamera.document) {
       try {
         await _controller.setFlashMode(FlashMode.off);
         picture = await _controller.takePicture();
-        listPicture.add(picture);
-        // ignore: use_build_context_synchronously
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => PreviewImageScreen(
-              picture: listPicture,
-              style: StyleCamera.passport,
-            ),
-          ),
-        ).then((_) => setState(
-              () {
-            listPicture.clear();
-            isPageFirst = true;
-          },
-        ));
+        if(listPicture.length < 20){
+          listPicture.add(picture);
+        }
+        setState(() {});
       } on CameraException catch (e) {
         debugPrint('Error occured while taking picture: $e');
         return null;
       }
-    } else if (styleCamera == StyleCamera.document) {
-      try {
-        await _controller.setFlashMode(FlashMode.off);
-        picture = await _controller.takePicture();
-        listPicture.add(picture);
-        // ignore: use_build_context_synchronously
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => PreviewImageScreen(
-              picture: listPicture,
-              style: StyleCamera.document,
-            ),
-          ),
-        ).then((_) => setState(
-              () {
-            listPicture.clear();
-            isPageFirst = true;
-          },
-        ));
-      } on CameraException catch (e) {
-        debugPrint('Error occured while taking picture: $e');
-        return null;
-      }
+    } else {
+
     }
   }
 
@@ -344,6 +369,50 @@ class _CameraScreenState extends State<CameraScreen> {
           child: CameraPreview(_controller),
         ),
       ],
+    );
+  }
+
+  Future<void> _showDialogMoveStyleCamera(StyleCamera style) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'Bạn có muốn chuyển sang ${style.name}, Nếu chuyển dữ liệu sẽ bị xóa và không thể khôi phục',
+            textAlign: TextAlign.left,
+          ),
+          actions: <Widget>[
+            ElevatedButton(
+              child: const Text(
+                'Đồng ý',
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+                listPicture.clear();
+                if (style == StyleCamera.cardID) {
+                  styleCamera = StyleCamera.cardID;
+                } else if (style == StyleCamera.passport) {
+                  styleCamera = StyleCamera.passport;
+                } else if (style == StyleCamera.document) {
+                  styleCamera = StyleCamera.document;
+                } else {}
+                setState(() {});
+              },
+            ),
+            ElevatedButton(
+              child: const Text(
+                'Hủy',
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

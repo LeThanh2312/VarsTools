@@ -56,9 +56,9 @@ dev_dependencies:
 
   # CROP IMAGE
   image_cropper: ^3.0.0
-  dotted_border: ^2.0.0
-  crop_your_image: ^0.7.2
 
+  # DATABASE
+  sqflite: ^2.0.3+1
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
